@@ -5,13 +5,13 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "beers")
-public class DbBeer {
+public class Beer {
 
     @PrimaryKey private final int id;
     @NonNull private final String name;
     @NonNull private final String imageUrl;
 
-    public DbBeer(int id, @NonNull String name, @NonNull String imageUrl) {
+    public Beer(int id, @NonNull String name, @NonNull String imageUrl) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -36,7 +36,7 @@ public class DbBeer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DbBeer beer = (DbBeer) o;
+        Beer beer = (Beer) o;
 
         if (id != beer.id) return false;
         if (!name.equals(beer.name)) return false;

@@ -1,4 +1,4 @@
-package es.guillermoorellana.punkapidroid.beers.presentation.beerlist;
+package es.guillermoorellana.punkapidroid.beers.presentation;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import es.guillermoorellana.punkapidroid.beers.presentation.entity.BeerEntry;
 
 import static java.util.Collections.emptyList;
 
-class BeerListAdapter extends RecyclerView.Adapter<BeerListAdapter.BeerHolder> {
+public class BeerListAdapter extends RecyclerView.Adapter<BeerListAdapter.BeerHolder> {
 
     @NonNull
     private List<BeerEntry> beerEntries = emptyList();

@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import es.guillermoorellana.core.injection.InjectingActivity;
 import es.guillermoorellana.punkapidroid.R;
 import es.guillermoorellana.punkapidroid.application.PunkApplication;
-import es.guillermoorellana.punkapidroid.beers.presentation.beerlist.BeerListComponent;
+import es.guillermoorellana.punkapidroid.beers.presentation.list.BeerListComponent;
 
 public class MainActivity extends AppCompatActivity implements InjectingActivity<BeerListComponent> {
 

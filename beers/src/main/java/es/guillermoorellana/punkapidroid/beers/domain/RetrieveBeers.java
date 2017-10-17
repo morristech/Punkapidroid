@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import es.guillermoorellana.core.domain.Interactor;
 import es.guillermoorellana.punkapidroid.beers.data.BeerRepository;
-import es.guillermoorellana.punkapidroid.beers.data.db.entity.DbBeer;
+import es.guillermoorellana.punkapidroid.beers.data.db.entity.Beer;
 import es.guillermoorellana.punkapidroid.beers.presentation.entity.BeerEntry;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
@@ -19,11 +19,11 @@ public class RetrieveBeers {
     @NonNull
     private final BeerRepository beerRepository;
     @NonNull
-    private final Function<DbBeer, BeerEntry> modelMapper;
+    private final Function<Beer, BeerEntry> modelMapper;
 
     @Inject
     RetrieveBeers(@NonNull BeerRepository beerRepository,
-                  @NonNull Function<DbBeer, BeerEntry> modelMapper) {
+                  @NonNull Function<Beer, BeerEntry> modelMapper) {
         this.beerRepository = beerRepository;
         this.modelMapper = modelMapper;
     }
@@ -31,11 +31,13 @@ public class RetrieveBeers {
     @NonNull
     public Flowable<List<BeerEntry>> getStream() {
         return beerRepository.getAll()
-                .flatMap(list ->
-                        Flowable.fromIterable(list)
-                                .map(modelMapper)
-                                .toList()
-                                .toFlowable()
-                );
+                .flatMap(this::mapEntries);
+    }
+
+    private Flowable<List<BeerEntry>> mapEntries(List<Beer> list) {
+        return Flowable.fromIterable(list)
+                .map(modelMapper)
+                .toList()
+                .toFlowable();
     }
 }

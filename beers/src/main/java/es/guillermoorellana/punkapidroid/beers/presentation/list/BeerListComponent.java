@@ -1,4 +1,4 @@
-package es.guillermoorellana.punkapidroid.beers.presentation.beerlist;
+package es.guillermoorellana.punkapidroid.beers.presentation.list;
 
 import dagger.Subcomponent;
 import es.guillermoorellana.core.injection.scopes.FragmentScope;
