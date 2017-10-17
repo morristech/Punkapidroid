@@ -1,8 +1,8 @@
-package es.guillermoorellana.punkapidroid.beers.presentation;
+package es.guillermoorellana.punkapidroid.beers.presentation.beerlist;
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,19 +17,30 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import es.guillermoorellana.core.injection.InjectingActivity;
 import es.guillermoorellana.punkapidroid.beers.R;
-import es.guillermoorellana.punkapidroid.beers.domain.BeerListViewModel;
+import es.guillermoorellana.punkapidroid.beers.presentation.BeerListViewModel;
 import es.guillermoorellana.punkapidroid.beers.presentation.entity.BeerEntry;
 
-public class BeersFragment extends Fragment {
-    ViewModelProvider.Factory viewModelFactory = new ViewModelProvider.Factory() {
-        @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            return null;
-        }
-    };
+public class BeerListFragment extends Fragment {
 
-    public BeersFragment() {
+    @Inject ViewModelProvider.Factory viewModelFactory;
+    private final BeerListAdapter adapter = new BeerListAdapter();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        InjectingActivity<BeerListComponent> activity = (InjectingActivity<BeerListComponent>) getActivity();
+        BeerListComponent component = activity.getComponent();
+        component.inject(this);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -47,8 +58,6 @@ public class BeersFragment extends Fragment {
     }
 
     private void setupRecyclerView(View view) {
-        BeerAdapter adapter = new BeerAdapter();
-
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -78,6 +87,7 @@ public class BeersFragment extends Fragment {
     }
 
     private void updateList(List<BeerEntry> beerEntries) {
-
+        adapter.setBeerEntries(beerEntries);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -1,35 +1,27 @@
 package es.guillermoorellana.punkapidroid.beers.data;
 
-import com.squareup.moshi.Moshi;
+import dagger.Module;
+import dagger.Provides;
+import es.guillermoorellana.punkapidroid.beers.data.db.BeersDbModule;
+import es.guillermoorellana.punkapidroid.beers.data.db.entity.DbBeer;
+import es.guillermoorellana.punkapidroid.beers.data.net.BeersNetworkModule;
+import es.guillermoorellana.punkapidroid.beers.data.net.entity.NetBeer;
+import es.guillermoorellana.punkapidroid.beers.presentation.entity.BeerEntry;
+import io.reactivex.functions.Function;
 
-import okhttp3.HttpUrl;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.moshi.MoshiConverterFactory;
-
+@Module(includes = {
+        BeersNetworkModule.class,
+        BeersDbModule.class
+})
 public class BeersDataModule {
 
-    private static final String BASE_URL = "https://api.punkapi.com/v2/";
-
-    public BeerNetworkService beerNetworkService() {
-        return retrofit(baseUrl(), moshi())
-                .create(BeerNetworkService.class);
+    @Provides
+    Function<NetBeer, DbBeer> mapperNetToDb() {
+        return netBeer -> new DbBeer(netBeer.getId(), netBeer.getName(), netBeer.getImageUrl());
     }
 
-    private Moshi moshi() {
-        return new Moshi.Builder()
-                .build();
-    }
-
-    private HttpUrl baseUrl() {
-        return HttpUrl.parse(BASE_URL);
-    }
-
-    private Retrofit retrofit(HttpUrl baseUrl, Moshi moshi) {
-        return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .baseUrl(baseUrl)
-                .build();
+    @Provides
+    Function<DbBeer, BeerEntry> mapperDbToView() {
+        return dbBeer -> new BeerEntry(dbBeer.getId(), dbBeer.getName(), dbBeer.getImageUrl());
     }
 }

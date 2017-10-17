@@ -1,4 +1,4 @@
-package es.guillermoorellana.punkapidroid.beers.domain;
+package es.guillermoorellana.punkapidroid.beers.presentation;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import es.guillermoorellana.punkapidroid.beers.domain.RetrieveBeers;
 import es.guillermoorellana.punkapidroid.beers.presentation.entity.BeerEntry;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -20,7 +23,8 @@ public class BeerListViewModel extends ViewModel {
     @NonNull
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public BeerListViewModel(@NonNull RetrieveBeers retrieveBeers) {
+    @Inject
+    BeerListViewModel(@NonNull RetrieveBeers retrieveBeers) {
         this.retrieveBeers = retrieveBeers;
 
         compositeDisposable.add(bindBeers());
